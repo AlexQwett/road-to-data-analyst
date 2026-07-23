@@ -21,8 +21,12 @@
 - birthsday
 - pets_name
 - pets_birthsday
-- sales_sum
-- sales_count
+
+---
+
+## Sales
+- sale_id (PK)
+- sum
 
 ---
 
