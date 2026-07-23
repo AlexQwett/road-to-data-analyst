@@ -1,14 +1,33 @@
-# Road to Data Analyst
+# 📊 Road to Data Analyst
 
-Моя ціль — отримати позицію Junior Data Analyst.
+Мій шлях до першої роботи Data Analyst.
 
-## План
+## 🎯 Мета
 
-- SQL
+Отримати позицію Junior Data Analyst та побудувати сильне портфоліо.
+
+## 🛠️ Tech Stack
+
+- SQL (PostgreSQL)
 - Python
+- Pandas
+- NumPy
 - Power BI
-- Statistics
-- Portfolio
-- Interview preparation
+- Excel
+- Git
+- GitHub
 
-## Progress
+## 📅 Learning Roadmap
+
+- [x] Repository created
+- [ ] SQL Fundamentals
+- [ ] Advanced SQL
+- [ ] Python for Data Analysis
+- [ ] Power BI
+- [ ] Statistics
+- [ ] Portfolio Projects
+- [ ] Interview Preparation
+
+## 📂 Projects
+
+Поки що в розробці 🚧
