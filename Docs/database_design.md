@@ -26,7 +26,6 @@
 
 ## Sales
 - sale_id (PK)
-- sum
 
 ---
 
