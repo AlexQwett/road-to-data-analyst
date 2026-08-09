@@ -111,7 +111,7 @@
 - created_at
 - updated_at
 - is_active
-- UNIQUE(shop_id, product_id)
+- UNIQUE (shop_id, product_id)
 
 ---
 
@@ -122,7 +122,7 @@
 - shop_id (FK)
 - name
 - email
-- phone_number
+- phone
 - created_at
 - updated_at
 - is_active
@@ -164,6 +164,8 @@
 - total_amount
 - payment_date
 - payment_method
+- created_at
+- updated_at
 
 ---
 
@@ -174,3 +176,5 @@
 - product_id (FK)
 - purchase_price
 - quantity
+- created_at
+- updated_at
