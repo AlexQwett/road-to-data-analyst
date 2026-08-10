@@ -11,7 +11,7 @@ Saves basic information about category
 | Field | Type | Description | Rules |
 |---|---|---|---|
 | category_id | BIGINT | Unique identifier of category | PK, Identity |
-| name | TEXT | Category name | NOT NULL |
+| name | TEXT | Category name | NOT NULL, UNIQUE |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 | is_active | BOOLEAN | Is active category | NOT NULL, DEFAULT TRUE |
@@ -34,7 +34,7 @@ Saves basic information about brand.
 | Field | Type | Description | Rules |
 |---|---|---|---|
 | brand_id | BIGINT | Unique identifier of brand | PK, Identity |
-| name | TEXT | Brand name | NOT NULL |
+| name | TEXT | Brand name | NOT NULL, UNIQUE |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 | is_active | BOOLEAN | Is active brand | NOT NULL, DEFAULT TRUE |
@@ -70,9 +70,9 @@ Saves basic information about product.
 
 - One product belongs to one category.
 - One product belongs to one brand.
-- One product has many order item.
-- One product has many purchase item.
-- One product has many inventory.
+- One product has many order items.
+- One product has many purchase items.
+- One product can have inventory records in many shops.
 - A product may be available in several stores. 
 - The purchase price is not saved in `product` because it depends on the batch.
 
@@ -92,8 +92,8 @@ Saves basic information about customer.
 | customer_id | BIGINT | Unique identifier of customer | PK, Identity |
 | name | TEXT | Customer name | NOT NULL |
 | phone_number | TEXT | Customer phone number | UNIQUE, NOT NULL |
-| email | TEXT | Customer email | NULL |
-| birthsday | DATE | Customer birthsday | NOT NULL |
+| email | TEXT | Customer email | UNIQUE |
+| birthday | DATE | Customer birthday | NULL |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 | is_active | BOOLEAN | Is active customer | NOT NULL, DEFAULT TRUE |
@@ -102,7 +102,7 @@ Saves basic information about customer.
 
 - One customer has many pets.
 - Unique customer phone number. Family members can't use the same phone number.
-- Email null. Not all customers have email.
+- Email is optional. Not all customers have email.
 
 
 
@@ -120,9 +120,9 @@ Saves basic information about pet of customer.
 | pet_id | BIGINT | Unique identifier of pet | PK, Identity |
 | customer_id | BIGINT | Unique pet owner (customer) identifier | FK → customer.customer_id |
 | name | TEXT | Pet name | NOT NULL |
-| species | TEXT | A specie of pet | NOT NULL |
+| species | TEXT | Species of pet | NOT NULL |
 | breed | TEXT | A breed of pet | NOT NULL |
-| birthsday | DATE | Pet birthsday | NULL |
+| birthday | DATE | Pet birthday | NULL |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 | is_active | BOOLEAN | Is active pet | NOT NULL, DEFAULT TRUE |
@@ -146,10 +146,10 @@ Saves basic information about shop.
 | Field | Type | Description | Rules |
 |---|---|---|---|
 | shop_id | BIGINT | Unique identifier of shop | PK, Identity |
-| name | TEXT | Shop name | NOT NULL |
+| name | TEXT | Shop name | NOT NULL, UNIQUE |
 | address | TEXT | Shop address | NOT NULL |
 | city | TEXT | Сity where the shop is located | NOT NULL |
-| phone | TEXT | Shop phone number | NOT NULL |
+| phone_number | TEXT | Shop phone number | NOT NULL |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 | is_active | BOOLEAN | Is active shop | NOT NULL, DEFAULT TRUE |
@@ -158,8 +158,8 @@ Saves basic information about shop.
 
 - One shop has many orders.
 - One shop has many inventories.
-- One shop has many emloyee.
-- One shop has many purchase.
+- One shop has many employees.
+- One shop has many purchases.
 
 
 
@@ -175,7 +175,7 @@ Saves basic information about employee position.
 | Field | Type | Description | Rules |
 |---|---|---|---|
 | position_id | BIGINT | Unique identifier of position | PK, Identity |
-| name | TEXT | Shop name | NOT NULL |
+| name | TEXT | Position name | NOT NULL, UNIQUE |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 | is_active | BOOLEAN | Is active position | NOT NULL, DEFAULT TRUE |
@@ -201,8 +201,8 @@ Saves basic information about employee.
 | position_id | BIGINT | Unique employee position identifier | FK → position.position_id |
 | shop_id | BIGINT | Unique identifier of the store where the employee works | FK → shop.shop_id |
 | name | TEXT | Employee name | NOT NULL |
-| email | TEXT | Employee email | NOT NULL |
-| phone | TEXT | Employee phone | NOT NULL |
+| email | TEXT | Employee email | NOT NULL, UNIQUE |
+| phone_number | TEXT | Employee phone | NOT NULL, UNIQUE |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 | is_active | BOOLEAN | Is active employee | NOT NULL, DEFAULT TRUE |
@@ -227,8 +227,8 @@ Saves information about order.
 |---|---|---|---|
 | order_id | BIGINT | Unique identifier of order | PK, Identity |
 | customer_id | BIGINT | Unique customer identifier | FK → customer.customer_id |
-| shop_id | BIGINT | Unique shops order identifier | FK → shop.shop_id |
-| employee_id | BIGINT | Unique shops employee identifier | FK → employee.employee_id |
+| shop_id | BIGINT | Identifier of the shop where the order was placed | FK → shop.shop_id |
+| employee_id | BIGINT | Identifier of the employee who created the order | FK → employee.employee_id |
 | order_date | TIMESTAMP | Date and time of order creation | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | payment_method | TEXT | Payment method of order | NOT NULL |
 | status | TEXT | Order status | NOT NULL |
@@ -239,7 +239,7 @@ Saves information about order.
 ### Business Rules
 
 - One order has many order items.
-- total_amount must be a NUMERIC(10,2) same as product price.
+- total_amount stores the total monetary value of the order.
 
 
 
@@ -259,14 +259,14 @@ Saves information about order item.
 | order_id | BIGINT | Unique order identifier | FK → order.order_id |
 | quantity | INTEGER | Quantity of product | NOT NULL, > 0 |
 | unit_price | NUMERIC(10,2) | Product price | NOT NULL, >= 0 |
-| discount_percent | NUMERIC(5,2) | Product discount | NOT NULL, >= 0, DEFAULT 0|
+| discount_percent | NUMERIC(5,2) | Product discount | NOT NULL, >= 0, <= 100, DEFAULT 0|
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 
 ### Business Rules
 
 - Many order items belong to one order.
-- Many order item belong to one product.
+- Many order items belong to one product.
 - unit_price must be a NUMERIC(10,2) same as product price.
 
 
@@ -283,18 +283,18 @@ Saves information about supplier.
 | Field | Type | Description | Rules |
 |---|---|---|---|
 | supplier_id | BIGINT | Unique identifier of supplier | PK, Identity |
-| name | TEXT | Name of supplier company | NOT NULL |
+| name | TEXT | Name of supplier company | NOT NULL, UNIQUE |
 | contact_person | TEXT | Name of supplier contact person | NOT NULL |
 | address | TEXT | Supplier address | NOT NULL |
 | email | TEXT | Supplier email | NOT NULL |
-| phone | TEXT | Supplier phone | NOT NULL |
+| phone_number | TEXT | Supplier phone | NOT NULL |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 | is_active | BOOLEAN | Is active supplier | NOT NULL, DEFAULT TRUE |
 
 ### Business Rules
 
-- One supplier has many purchase.
+- One supplier has many purchases.
 
 
 
@@ -309,11 +309,11 @@ Saves information about purchase.
 
 | Field | Type | Description | Rules |
 |---|---|---|---|
-| purchase_id | BIGINT | Unique identifier of supplier | PK, Identity |
+| purchase_id | BIGINT | Unique identifier of purchase | PK, Identity |
 | supplier_id | BIGINT | Unique supplier identifier | FK → supplier.supplier_id |
 | shop_id | BIGINT | Unique shop to purchase identifier | FK → shop.shop_id |
 | employee_id | BIGINT | Unique responsible employee for purchase identifier | FK → employee.employee_id |
-| purchase_date | DATE | Date of purchase creation | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
+| purchase_date | DATE | Date of purchase creation | NOT NULL |
 | status | TEXT | Purchase status | NOT NULL |
 | total_amount | NUMERIC(10,2) | Purchase total amount | NOT NULL, >= 0 |
 | payment_date | TIMESTAMP | Date and time of purchase pay | NULL |
@@ -323,8 +323,8 @@ Saves information about purchase.
 
 ### Business Rules
 
-- One purchase has many purchase_item.
-- total_amount must be a NUMERIC(10,2) same as product price.
+- One purchase has many purchase items.
+- total_amount stores the total monetary value of the purchase.
 
 
 
@@ -343,14 +343,14 @@ Saves information about purchase item.
 | purchase_id | BIGINT | Unique purchase identifier | FK → purchase.purchase_id |
 | product_id | BIGINT | Unique product to purchase identifier | FK → product.product_id |
 | purchase_price | NUMERIC(10,2) | Purchase price | NOT NULL, > 0 |
-| quantity | INTEGER | Quantity of product | NOT NULL |
+| quantity | INTEGER | Quantity of product | NOT NULL, > 0 |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 
 ### Business Rules
 
 - Many purchase items belong to one purchase.
-- purchase_price must be a NUMERIC(10,2) same as product price.
+- purchase_price uses NUMERIC(10,2) because it stores the purchase price of the product in a specific batch.
 
 
 
@@ -366,9 +366,9 @@ Saves information about shop inventory.
 | Field | Type | Description | Rules |
 |---|---|---|---|
 | inventory_id | BIGINT | Unique identifier of inventory | PK, Identity |
-| shop_id | BIGINT | Unique shop inventory identifier | FK → shop.shop_id, UNIQUE(shop_id, product_id) |
-| product_id | BIGINT | Unique product identifier in shop inventory | FK → product.product_id, UNIQUE(shop_id, product_id) |
-| quantity | INTEGER | Quantity of product | NOT NULL |
+| shop_id | BIGINT | Unique shop inventory identifier | FK → shop.shop_id |
+| product_id | BIGINT | Unique product identifier in shop inventory | FK → product.product_id |
+| quantity | INTEGER | Quantity of product | NOT NULL, > 0 |
 | created_at | TIMESTAMP | Date and time of creation of the record | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
 | updated_at | TIMESTAMP | Date and time of last edit | NULL |
 | is_active | BOOLEAN | Is active product | NOT NULL, DEFAULT TRUE |
@@ -376,4 +376,6 @@ Saves information about shop inventory.
 ### Business Rules
 
 - "Inventory" is needed for checking stock of product in shop.
-- To avoid duplication of product availability in one store, there is a condition UNIQUE(shop_id, product_id).
+- Each product can have only one inventory record per shop, enforced by UNIQUE(shop_id, product_id).
+- One shop has many inventory records.
+- One product can have inventory records in many shops.
