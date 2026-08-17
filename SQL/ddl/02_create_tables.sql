@@ -165,6 +165,9 @@ CREATE TABLE orders (
 
     CONSTRAINT chk_total_amount
         CHECK (total_amount >= 0)
+
+    CONSTRAINT chk_order_status
+        CHECK (status IN ('new','paid','shipped','delivered','cancelled'))
 );
 
 CREATE TABLE order_item (
@@ -236,7 +239,10 @@ CREATE TABLE purchase (
         REFERENCES employee(employee_id),
 
     CONSTRAINT chk_total_amount
-        CHECK (total_amount >= 0)
+        CHECK (total_amount >= 0),
+
+    CONSTRAINT chk_purchase_status
+        CHECK (status IN ('created','ordered','paid','delivered','confirmed','cancelled'))
 );
 
 CREATE TABLE purchase_item (
