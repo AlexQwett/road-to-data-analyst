@@ -34,7 +34,7 @@ CREATE TABLE product (
     brand_id BIGINT NOT NULL,
     name TEXT NOT NULL,
     sell_price NUMERIC(10,2) NOT NULL,
-    weight_g INTEGER NOT NULL,
+    weight_g INTEGER,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
