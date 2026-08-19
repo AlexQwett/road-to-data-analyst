@@ -164,7 +164,7 @@ CREATE TABLE orders (
         REFERENCES employee(employee_id),
 
     CONSTRAINT chk_total_amount
-        CHECK (total_amount >= 0)
+        CHECK (total_amount >= 0),
 
     CONSTRAINT chk_order_status
         CHECK (status IN ('new','paid','shipped','delivered','cancelled'))
