@@ -95,7 +95,7 @@
 - name
 - address
 - city
-- phone
+- phone_number
 - created_at
 - updated_at
 - is_active
@@ -122,7 +122,7 @@
 - shop_id (FK)
 - name
 - email
-- phone
+- phone_number
 - created_at
 - updated_at
 - is_active
@@ -146,7 +146,7 @@
 - contact_person
 - address
 - email
-- phone
+- phone_number
 - created_at
 - updated_at
 - is_active
