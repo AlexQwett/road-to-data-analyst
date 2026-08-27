@@ -1,0 +1,1 @@
+UPDATE customer SET phone_number = '991112233' WHERE phone_number = '0518974059'
