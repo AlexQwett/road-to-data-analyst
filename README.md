@@ -20,7 +20,7 @@
 ## 📅 Learning Roadmap
 
 - [x] Repository created
-- [ ] SQL Fundamentals
+- [x] SQL Fundamentals
 - [ ] Advanced SQL
 - [ ] Python for Data Analysis
 - [ ] Power BI
